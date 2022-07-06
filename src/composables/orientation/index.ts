@@ -4,7 +4,7 @@ export function orientation() {
 
   const isPortrait = ref(true)
 
-  let mediaMatch = window.matchMedia("(orientation: portrait)")
+  let mediaMatch = window.matchMedia('(orientation: portrait)')
 
   const onChange = (e: any) => {
     isPortrait.value = e.matches
