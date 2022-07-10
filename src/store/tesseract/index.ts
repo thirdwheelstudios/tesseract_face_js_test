@@ -6,11 +6,13 @@ export const useOcrApiStore = defineStore('ocrApi', {
     let apiIsInitialized: boolean | undefined
     let worker: Tesseract.Worker | undefined
     let ocrText: string | undefined
+    let ocrBlob: Blob | null | undefined
 
     return {
       apiIsInitialized,
       worker,
       ocrText,
+      ocrBlob,
     }
   },
   getters: {
@@ -20,6 +22,9 @@ export const useOcrApiStore = defineStore('ocrApi', {
     text(state) {
       return state.ocrText
     },
+    blob(state) {
+      return state.ocrBlob
+    }
   },
   actions: {
     async initOcrApi() {
@@ -34,14 +39,19 @@ export const useOcrApiStore = defineStore('ocrApi', {
 
       this.apiIsInitialized = true
     },
-    async detectText(canvas: HTMLCanvasElement) {
+    detectText(canvas: HTMLCanvasElement) {
         if (!this.worker) return
 
-        const { data: { text } } = await this.worker.recognize(canvas)
+        const worker = this.worker
 
-        this.ocrText = text
+        canvas.toBlob(async (blob) => {
+          const { data: { text } } = await worker.recognize(canvas)
 
-        console.log(text)
+          this.ocrText = text
+          this.ocrBlob = blob
+  
+          console.log(text)
+        })
     },
   },
 })

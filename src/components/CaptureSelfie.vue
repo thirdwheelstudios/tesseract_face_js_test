@@ -13,6 +13,7 @@ const countdownInterval = ref<number>()
 const countdownSeconds = ref(3)
 
 const hasSelection = computed(() => faceStore.apiDetections?.length === 1)
+const isInitialising = computed(() => !faceStore.isInitialized)
 
 onMounted(async () => {
 
@@ -75,6 +76,7 @@ watch(() => countdownSeconds.value, (value) => {
     <canvas ref="canvasEle"></canvas>
     <div class="overlay" :class="{ 'has-selection': hasSelection }">
         <div v-show="hasSelection && countdownSeconds >= 0">{{ countdownSeconds }}s</div>
+        <div v-show="isInitialising">Initialising Face API</div>
     </div>
 </template>
 

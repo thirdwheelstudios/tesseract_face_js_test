@@ -13,6 +13,8 @@ const interval = ref<number>()
 const countdownInterval = ref<number>()
 const countdownSeconds = ref(3)
 
+const isInitialising = computed(() => !ocrStore.isInitialized)
+
 const hasSelection = computed(() => {
 
     if ((ocrStore.text?.length ?? 0) < 39) return false
@@ -71,9 +73,7 @@ watch(() => hasSelection.value,(value) => {
 
 watch(() => countdownSeconds.value, (value) => {
     if (value === 0 && canvasEle.value) {
-        canvasEle.value.toBlob((blob) => {
-            captureStore.setPassportBlob(blob)
-        })
+        captureStore.setPassportBlob(ocrStore.blob!)
     }
 })
 
@@ -88,6 +88,7 @@ watch(() => countdownSeconds.value, (value) => {
     <canvas ref="canvasEle"></canvas>
     <div class="overlay" :class="{ 'has-selection': hasSelection }">
         <div v-show="hasSelection && countdownSeconds >= 0">{{ countdownSeconds }}s</div>
+        <div v-show="isInitialising">Initialising OCR API</div>
     </div>
 </template>
 
