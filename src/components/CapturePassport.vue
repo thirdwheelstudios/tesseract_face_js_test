@@ -19,7 +19,8 @@ const hasSelection = computed(() => {
 
     const mrzMatch = ocrStore.text?.match('P<[A-Z]*<{2}[A-Z]*')
 
-    return faceStore.apiDetections?.length === 1 && mrzMatch && mrzMatch.length > 0
+    // return faceStore.apiDetections?.length === 1 && mrzMatch && mrzMatch.length > 0
+    return mrzMatch && mrzMatch.length > 0
 })
 
 onMounted(async () => {
