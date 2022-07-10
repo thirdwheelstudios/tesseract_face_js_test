@@ -24,9 +24,7 @@ export const useOcrApiStore = defineStore('ocrApi', {
   actions: {
     async initOcrApi() {
 
-      const worker = createWorker({
-        logger: m => console.log(m)
-      })
+      const worker = createWorker()
 
       await worker.load();
       await worker.loadLanguage('eng');
@@ -36,12 +34,14 @@ export const useOcrApiStore = defineStore('ocrApi', {
 
       this.apiIsInitialized = true
     },
-    async recognize() {
+    async detectText(canvas: HTMLCanvasElement) {
         if (!this.worker) return
 
-        const { data: { text } } = await this.worker.recognize('https://tesseract.projectnaptha.com/img/eng_bw.png')
+        const { data: { text } } = await this.worker.recognize(canvas)
 
         this.ocrText = text
+
+        console.log(text)
     },
   },
 })
