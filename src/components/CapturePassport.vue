@@ -17,7 +17,7 @@ const hasSelection = computed(() => {
 
     if ((ocrStore.text?.length ?? 0) < 39) return false
 
-    const mrzMatch = ocrStore.text?.match('P<[A-Z]*<{2}[A-Z]*')
+    const mrzMatch = ocrStore.text?.match('[A-Z]*<+')
 
     // return faceStore.apiDetections?.length === 1 && mrzMatch && mrzMatch.length > 0
     return mrzMatch && mrzMatch.length > 0
